@@ -1,31 +1,236 @@
-<html>
+<!DOCTYPE html>
+<html lang="nl">
 <head>
-<style>
-table, th, td {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzels & Schuifpuzzels</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-}
-table {
-  border-spacing: 3px;
-}
-</style>
+        h1 {
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px 0 15px 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            color: #2980b9;
+        }
+
+        .section-title svg {
+            margin-right: 10px;
+            fill: #3498db;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 5px solid #3498db;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+
+        .card.sliding {
+            border-top-color: #e67e22;
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+
+        .info {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #34495e;
+            margin-right: 5px;
+        }
+
+        .btn {
+            display: block;
+            text-align: center;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .card.sliding .btn {
+            background: #e67e22;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .card.sliding .btn:hover {
+            background: #d35400;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #bdc3c7;
+        }
+    </style>
 </head>
 <body>
-<center><H1>puzzels en schuifpuzzels</h1></center>
-<table>
-<tr><td><b>puzzlestukjes:</b></td><td></td><td></td><td></td><tr>
-<tr><td>afmeting:</td><td>afbeelding</td><td>datum:</td><td>link:</td><tr>
-<tr><td>3x2</td><td>blauwe lelie</td><td>2026-05-03</td><td><a href="puzzle_3x2_blauwe_bloem_20260504.html" target=_blank>klik hier</a></td><tr>
-<tr><td>3x3</td><td>klaproos in de muur</td><td>2026-05-04</td><td><a href="puzzle_3x3_klaproos_Bouillac_202620503.html" target=_blank>klik hier</a></td><tr>
 
-<tr><td><b>schuifpuzzel:</b></td><td></td><td></td><td></td><tr>
-<tr><td>afmeting:</td><td>afbeelding</td><td>datum:</td><td>link:</td><tr>
-<tr><td>3x3</td><td>klaproos in de muur in Bouillac</td><td>2026-05-02</td><td><a href="schuifpuzzel_3x2_klaproos_in_muur_20250504.html" target=_blank>klik hier</a></td><tr>
-<tr><td>3x3</td><td>Winkel producteurs in Belves</td><td>2026-05-02</td><td><a href="schuifpuzzel_3x2_winkel_in_belves_20250504.html" target=_blank>klik hier</a></td><tr>
-<tr><td>3x3</td><td>Blauwe bloem op de camping</td><td>2026-05-02</td><td><a href="schuifpuzzel_3x3_blauwe_bloem.html" target=_blank>klik hier</a></td><tr>
-<tr><td>3x3</td><td>Uitzicht camping Terme d'Astor</td><td>2026-05-02</td><td><a href="schuifpuzzel_3x3_uitzicht_camping_20260506.html" target=_blank>klik hier</a></td><tr>
+    <h1>?? Puzzels & Schuifpuzzels</h1>
+
+    <!-- Sectie 1: Puzzelstukjes -->
+    <div class="section-title">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M20,12c0-1.1-0.9-2-2-2V6c0-1.1-0.9-2-2-2h-4c0-1.1-0.9-2-2-2S8,2.9,8,4H4C2.9,4,2,4.9,2,6v4c-1.1,0-2,0.9-2,2s0.9,2,2,2v4 c0,1.1,0.9,2,2,2h4c0,1.1,0.9,2,2,2s2-0.9,2-2h4c1.1,0,2-0.9,2-2v-4C19.1,14,20,13.1,20,12z"/></svg>
+        Puzzelstukjes
+    </div>
+
+    <div class="container">
+        <!-- Item 1 -->
+        <div class="card">
+            <div>
+                <h3>Blauwe lelie</h3>
+                <div class="info">
+                    <span class="tag">3x2</span> Geplaatst op 03-05-2026
+                </div>
+            </div>
+            <a href="puzzle_3x2_blauwe_bloem_20260504.html" target="_blank" class="btn">Speel Puzzel</a>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="card">
+            <div>
+                <h3>Klaproos in de muur</h3>
+                <div class="info">
+                    <span class="tag">3x3</span> Geplaatst op 04-05-2026
+                </div>
+            </div>
+            <a href="puzzle_3x3_klaproos_Bouillac_202620503.html" target="_blank" class="btn">Speel Puzzel</a>
+        </div>
 
 
+        <!-- start Item 3 -->
+        <div class="card">
+            <div>
+                <h3>Welkomstbord camping</h3>
+                <div class="info">
+                    <span class="tag">3x2</span> Geplaatst op 04-05-2026
+                </div>
+            </div>
+            <a href="puzzle_welkomstbord_terme_3x2_20260506.html" target="_blank" class="btn">Speel Puzzel</a>
+        </div>
+        <!-- eind Item 3 -->
 
-</table>
+        <!-- start Item 4-->
+        <div class="card">
+            <div>
+                <h3>Mooie witte bloem</h3>
+                <div class="info">
+                    <span class="tag">3x2</span> Geplaatst op 06-05-2026
+                </div>
+            </div>
+            <a href=" puzzle_4x2_witte_bloem_20260506.html" target="_blank" class="btn">Speel Puzzel</a>
+        </div>
+        <!-- eind Item4 -->
+    </div>
+
+    <!-- Sectie 2: Schuifpuzzels -->
+    <div class="section-title">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M3,3V21H21V3H3M7,14H11V18H7V14M13,14H17V18H13V14M7,9H11V13H7V9M13,9H17V13H13V9Z"/></svg>
+        Schuifpuzzels
+    </div>
+
+    <div class="container">
+        <div class="card sliding">
+            <div>
+                <h3>Klaproos in Bouillac</h3>
+                <div class="info">
+                    <span class="tag">3x3</span> Geplaatst op 02-05-2026
+                </div>
+            </div>
+            <a href="schuifpuzzel_3x2_klaproos_in_muur_20250504.html" target="_blank" class="btn">Start Schuiven</a>
+        </div>
+
+        <div class="card sliding">
+            <div>
+                <h3>Winkel producteurs (Belves)</h3>
+                <div class="info">
+                    <span class="tag">3x3</span> Geplaatst op 02-05-2026
+                </div>
+            </div>
+            <a href="schuifpuzzel_3x2_winkel_in_belves_20250504.html" target="_blank" class="btn">Start Schuiven</a>
+        </div>
+
+        <div class="card sliding">
+            <div>
+                <h3>Blauwe bloem op de camping</h3>
+                <div class="info">
+                    <span class="tag">3x3</span> Geplaatst op 02-05-2026
+                </div>
+            </div>
+            <a href="schuifpuzzel_3x3_blauwe_bloem.html" target="_blank" class="btn">Start Schuiven</a>
+        </div>
+
+        <div class="card sliding">
+            <div>
+                <h3>Uitzicht camping Terme d'Astor</h3>
+                <div class="info">
+                    <span class="tag">3x3</span> Geplaatst op 02-05-2026
+                </div>
+            </div>
+            <a href="schuifpuzzel_3x3_uitzicht_camping_20260506.html" target="_blank" class="btn">Start Schuiven</a>
+        </div>
+    </div>
+
+    <footer>Veel puzzelplezier!</footer>
+
 </body>
-</HTML>
+</html>
