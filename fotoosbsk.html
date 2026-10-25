@@ -18,6 +18,67 @@
             padding: 20px;
         }
 
+        /* Wachtwoord / Vraag Scherm */
+        .auth-container {
+            max-width: 400px;
+            margin: 80px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .auth-container h2 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #222;
+        }
+
+        .auth-container p {
+            margin-bottom: 20px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .auth-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .error-msg {
+            color: #d9534f;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        /* Galerij Inhoud (Standaard verborgen) */
+        .gallery-content {
+            display: none;
+        }
+
         h1 {
             text-align: center;
             margin-bottom: 20px;
@@ -64,7 +125,7 @@
             padding: 0 5px;
         }
 
-        /* Modal / Grote foto weergave */
+        /* Modal voor grote foto */
         .lightbox {
             display: none;
             position: fixed;
@@ -147,9 +208,22 @@
 </head>
 <body>
 
-    <h1>Fotogalerij</h1>
+    <!-- Wachtwoord Vraag Scherm -->
+    <div class="auth-container" id="authBox">
+        <h2>Toegang tot de foto's</h2>
+        <p>Wat is de naam van het gebouw waar het feest plaatsvond?</p>
+        <form id="authForm" onsubmit="controleerAntwoord(event)">
+            <input type="text" id="antwoordInput" class="auth-input" placeholder="Typ je antwoord..." required autofocus>
+            <button type="submit" class="auth-btn">Bekijk foto's</button>
+        </form>
+        <div class="error-msg" id="errorMsg">Dat antwoord is helaas niet juist. Probeer het opnieuw!</div>
+    </div>
 
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <!-- Galerij (verschijnt pas na juist antwoord) -->
+    <div class="gallery-content" id="galleryContent">
+        <h1>Fotogalerij Feest</h1>
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
 
     <!-- Modal voor grote weergave -->
     <div class="lightbox" id="lightbox">
@@ -164,8 +238,8 @@
     </div>
 
     <script>
-        // Vul hier de bestandsnamen in van de foto's in dezelfde map:
-        const fotoBestanden = [
+        // Vul hier de juiste bestandsnamen in van de foto's:
+         const fotoBestanden = [
             "001.jpg",
             "002.jpg",
             "003.jpg",
@@ -251,25 +325,50 @@
             "alg018.jpg"
         ];
 
-        const galleryGrid = document.getElementById('galleryGrid');
+        // Het verwachte antwoord (altijd in kleine letters noteren):
+        const JUIST_ANTWOORD = "erasmus";
+
+        function controleerAntwoord(event) {
+            event.preventDefault(); // Voorkom herladen van pagina bij submit
+
+            const ingevoerd = document.getElementById('antwoordInput').value.trim().toLowerCase();
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (ingevoerd === JUIST_ANTWOORD) {
+                // Antwoord klopt: verberg vraag, toon galerij
+                document.getElementById('authBox').style.display = 'none';
+                document.getElementById('galleryContent').style.display = 'block';
+                laadGalerij();
+            } else {
+                // Fout antwoord
+                errorMsg.style.display = 'block';
+                document.getElementById('antwoordInput').select();
+            }
+        }
+
+        function laadGalerij() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            galleryGrid.innerHTML = ''; // Maak leeg voor de zekerheid
+
+            fotoBestanden.forEach(bestandsnaam => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+
+                item.innerHTML = `
+                    <img src="${bestandsnaam}" alt="${bestandsnaam}" loading="lazy">
+                    <span>${bestandsnaam}</span>
+                `;
+
+                item.addEventListener('click', () => openLightbox(bestandsnaam));
+                galleryGrid.appendChild(item);
+            });
+        }
+
+        // Lightbox functionaliteit
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
         const lightboxCaption = document.getElementById('lightboxCaption');
         const downloadLink = document.getElementById('downloadLink');
-
-        // Bouw de galerij op
-        fotoBestanden.forEach(bestandsnaam => {
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-
-            item.innerHTML = `
-                <img src="${bestandsnaam}" alt="${bestandsnaam}" loading="lazy">
-                <span>${bestandsnaam}</span>
-            `;
-
-            item.addEventListener('click', () => openLightbox(bestandsnaam));
-            galleryGrid.appendChild(item);
-        });
 
         function openLightbox(bestandsnaam) {
             lightboxImg.src = bestandsnaam;
@@ -283,18 +382,12 @@
             lightbox.style.display = 'none';
         }
 
-        // Sluit lightbox wanneer je buiten de afbeelding klikt
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
+            if (e.target === lightbox) closeLightbox();
         });
 
-        // Sluit met Escape-toets
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            }
+            if (e.key === 'Escape') closeLightbox();
         });
     </script>
 </body>
