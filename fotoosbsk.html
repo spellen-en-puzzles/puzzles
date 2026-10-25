@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotogalerij</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Grid met kleine foto's */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item span {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #666;
+            word-break: break-all;
+            padding: 0 5px;
+        }
+
+        /* Modal / Grote foto weergave */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            position: relative;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .lightbox-footer {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 30px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .close-btn:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Fotogalerij</h1>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+
+    <!-- Modal voor grote weergave -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="close-btn" onclick="closeLightbox()">&times;</button>
+            <img id="lightboxImg" src="" alt="Grote foto">
+            <div class="lightbox-footer">
+                <span id="lightboxCaption" style="font-size: 0.9em; color: #555;"></span>
+                <a id="downloadLink" class="download-btn" href="" download>Download Foto</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vul hier de bestandsnamen in van de foto's in dezelfde map:
+        const fotoBestanden = [
+            "001.jpg",
+            "002.jpg",
+            "003.jpg",
+            "004.jpg",
+            "005.jpg",
+            "006.jpg",
+            "007.jpg",
+            "008.jpg",
+            "009.jpg",
+            "010.jpg",
+            "011.jpg",
+            "012.jpg",
+            "013.jpg",
+            "014.jpg",
+            "015.jpg",
+            "016.jpg",
+            "018.jpg",
+            "019.jpg",
+            "020.jpg",
+            "021.jpg",
+            "022.jpg",
+
+            "024.jpg",
+            "025.jpg",
+
+            "027.jpg",
+
+            "029.jpg",
+            "030.jpg",
+            "031.jpg",
+            "032.jpg",
+            "033.jpg",
+            "034.jpg",
+            "035.jpg",
+            "036.jpg",
+            "037.jpg",
+            "038.jpg",
+            "039.jpg",
+            "040.jpg",
+            "041.jpg",
+            "042.jpg",
+            "043.jpg",
+            "044.jpg",
+            "045.jpg",
+            "046.jpg",
+            "047.jpg",
+            "048.jpg",
+            "049.jpg",
+            "050.jpg",
+            "051.jpg",
+            "052.jpg",
+            "053.jpg",
+            "054.jpg",
+            "055.jpg",
+            "056.jpg",
+            "057.jpg",
+            "058.jpg",
+            "059.jpg",
+            "060.jpg",
+            "061.jpg",
+            "062.jpg",
+            "063.jpg",
+            "064.jpg",
+            "065.jpg",
+            "066.jpg",
+            "alg001.jpg",
+            "alg002.jpg",
+            "alg003.jpg",
+            "alg004.jpg",
+            "alg005.jpg",
+            "alg006.jpg",
+            "alg007.jpg",
+            "alg008.jpg",
+            "alg009.jpg",
+            "alg010.jpg",
+            "alg011.jpg",
+            "alg012.jpg",
+            "alg013.jpg",
+            "alg014.jpg",
+            "alg015.jpg",
+            "alg016.jpg",
+            "alg017.jpg",
+            "alg018.jpg"
+        ];
+
+        const galleryGrid = document.getElementById('galleryGrid');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const downloadLink = document.getElementById('downloadLink');
+
+        // Bouw de galerij op
+        fotoBestanden.forEach(bestandsnaam => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+
+            item.innerHTML = `
+                <img src="${bestandsnaam}" alt="${bestandsnaam}" loading="lazy">
+                <span>${bestandsnaam}</span>
+            `;
+
+            item.addEventListener('click', () => openLightbox(bestandsnaam));
+            galleryGrid.appendChild(item);
+        });
+
+        function openLightbox(bestandsnaam) {
+            lightboxImg.src = bestandsnaam;
+            lightboxCaption.textContent = bestandsnaam;
+            downloadLink.href = bestandsnaam;
+            downloadLink.download = bestandsnaam;
+            lightbox.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+        }
+
+        // Sluit lightbox wanneer je buiten de afbeelding klikt
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Sluit met Escape-toets
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
